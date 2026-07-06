@@ -22,15 +22,16 @@
 - **Kotlin Type Interoperability**: Starsector's underlying Java API lacks `@Nullable` / `@NonNull` annotations. Kotlin interprets these as Platform Types (`Type!`).
 - **Strict Boundary Rules**: 
   1. **Starsector API Layer**: Never make functions accept non-nullable types (`Type`) if they interface **directly** with incoming data from the Starsector API. Always declare them as nullable (`Type?`). 
-  2. **Internal Mod Architecture**: Methods working entirely within **our own custom mod code** that do not directly involve receiving raw parameters from the Starsector API must strictly prefer using non-nullable types (`Type`). If they have to return an "empty"/"nothing" value, use a non-nullable Optional, with value Optional.empty()
-  3. **Internal Optional Tri-State (Our Code Only)**: If our own internal method needs to account for an absent or conditional state, do NOT use a nullable return type (`Type?`). Instead, utilize a non-nullable return type wrapped in `java.util.Optional`. This explicitly differentiates between:
-     - **`null`**: A raw, volatile value coming straight from the Starsector API.
-     - **`Optional.empty()`**: A clean, non-null signal from our own code that a value is intentionally absent.
-     - **`Optional.of(...)`**: A clean, non-null signal from our own code containing the valid data.
+  2. **Internal Mod Architecture**: Methods working entirely within **our own custom mod code** that do not directly involve receiving raw parameters from the Starsector API must strictly prefer using non-nullable types (`Type`).
+  3. **Adaptive Optional Type Resolution (Our Code Only)**: If our own internal method needs to account for an absent or conditional state, do NOT use a nullable return type (`Type?`). Instead, utilize a non-nullable wrapper type. Choose the package dynamically using this hierarchy:
+     - **Project-Specific Custom Optional**: First, look up workspace symbols (LSP) to check if the active project defines its own custom `Optional` class within its local package tree (e.g., `exoticatechnologies.util.datastructures.Optional` or equivalent). If found, you **MUST** import and use it.
+     - **Standard Fallback**: If the local project does not define a custom `Optional` class, fall back to standard `java.util.Optional`.
+  4. **Intended Tri-State Semantics**: Use this structural separation to explicitly differentiate execution paths:
+     - **`null`**: A raw, volatile, unsafe value coming straight from the Starsector engine API layer.
+     - **`Optional.empty()`**: A clean, non-null signal from our custom systems indicating data is intentionally absent.
+     - **`Optional.of(...)`**: A clean, non-null container holding our validated data.
   Use raw nullable return types (`Type?`) inside our custom code **VERY SPARINGLY**.
 
-  
-- **Handling Nullable Return Types**: If a method must return a value that can be absent, do NOT return a nullable type (`Type?`). It is **ALWAYS** advised to use a non-nullable return type wrapped in `Optional<Type>` (e.g., `Optional.ofNullable(...)`).
 - **Strict Null Handling Constructs**:
   1. **Safe Calls**: Use safe calls (`?.`) and `?.let { ... }` blocks freely to safely scope operations on nullable instances.
   2. **No Unsafe Assertions**: Never use the double-bang operator (`variable!!`), **unless** it is placed directly inside an explicit `if (variable != null) { ... }` null check block where safety is fully guaranteed.
