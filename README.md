@@ -90,11 +90,21 @@ You are also free to just directly modify your local copy of the submodule and k
 git submodule add https://github.com/RkShaRkz/Starsector-OpenCode .opencode-brain
 ```
 2) Create symbolic links (since these files need to be in project root for opencode to see them)
+Linux:
 ```
 ln -s .opencode-brain/opencode.json opencode.json
 ln -s .opencode-brain/RULES.md RULES.md
 ln -s .opencode-brain/AGENTS.md AGENTS.md
 ```
+Windows:
+```
+mklink opencode.json .opencode-brain\opencode.json
+mklink RULES.md .opencode-brain\RULES.md
+mklink AGENTS.md .opencode-brain\AGENTS.md
+```
+_WARNING:_ I've noticed that when symlinks are created in this way, when the root files are updated the symlinks do not update their content.
+Unless you figure out how to address this issue, the easiest course of action is to simply regenerate the symlinks after updating the submodule.
+
 3) Commit the new submodule to your repository
 ```
 git add .gitmodules .opencode-brain opencode.json RULES.md AGENTS.md
