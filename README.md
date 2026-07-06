@@ -7,8 +7,14 @@ be included to any mod project as a git submodule and (kinda) work out of the bo
 If you know what git submodules are and already have opencode installed (and working) - just add this repo as a git
 submodule to your project like this:
 ```
-
+git submodule add https://github.com/RkShaRkz/Starsector-OpenCode .opencode-brain
 ```
+
+Then, navigate to the project (the one where this was added as a submodule) from the WSL terminal, **create necessary symlinks**,
+type in `opencode`, and watch it work it's magic.
+
+In case you're unfamiliar with git submodules or don't have anything installed, read on. But - for Git, the best source of information
+will always be [Git-SCM](https://git-scm.com/book/en/v2)
 
 
 # Clean install
@@ -103,3 +109,13 @@ git add .opencode-brain
 git commit -m "chore: update Starsector-OpenCode submodule to latest version"
 git push
 ```
+
+5) Remember to clone your mod recursively from now on.
+
+Every fresh clone of the mod will need to have submodules initialized, cloned into and generally have the opencode template integrated into it again (when it shouldn't).
+
+To get around that, simply remember to clone your mod like
+```
+git clone --recursive <YOUR-MAIN-MOD-REPOSITORY-URL>
+```
+which will automagically pick up the submodules (this repo) and set everything up properly. You're welcome.
