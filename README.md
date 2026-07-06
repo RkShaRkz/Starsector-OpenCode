@@ -79,3 +79,27 @@ You are also free to just directly modify your local copy of the submodule and k
 
 # Integrating this repository in your own mod as a submodule
 
+1) Add this repository as a submodule to your repo
+```
+git submodule add https://github.com/RkShaRkz/Starsector-OpenCode .opencode-brain
+```
+2) Create symbolic links (since these files need to be in project root for opencode to see them)
+```
+ln -s .opencode-brain/opencode.json opencode.json
+ln -s .opencode-brain/RULES.md RULES.md
+ln -s .opencode-brain/AGENTS.md AGENTS.md
+```
+3) Commit the new submodule to your repository
+```
+git add .gitmodules .opencode-brain opencode.json RULES.md AGENTS.md
+git commit -m "chore: integrate universal Starsector OpenCode framework submodule"
+git push
+```
+4) OPTIONAL: update the submodule and push changes (to your repo) if any
+```
+git submodule update --remote --merge
+
+git add .opencode-brain
+git commit -m "chore: update Starsector-OpenCode submodule to latest version"
+git push
+```
