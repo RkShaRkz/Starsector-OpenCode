@@ -11,6 +11,11 @@
 - **Memory Leaks**: Do NOT save references to `ShipAPI`, `CombatEngineAPI`, `EveryFrameCombatPlugin`, or `SectorEntityToken` inside long-lived static variables, singletons, or persistent scripts. They cause massive memory leaks when reloading saves or switching combat sessions.
 - **Transience (Java)**: Mark all complex runtime objects that shouldn't be serialized to the `campaign.xml` save file as `transient`.
 - **Transience (Kotlin)**: Use the `@Transient` annotation on fields/properties that contain runtime game state data to prevent catastrophic save game corruption.
+- **Comment Preservation & Auditing (Crucial)**: You are strictly forbidden from deleting existing inline comments that are still descriptive and hold true to the logic.
+  1. If an inline comment describing a block of code remains accurate post-refactor, you **MUST** preserve it exactly as written, but are free to update it to be closer-related to the modified logic.
+  2. If a comment is no longer accurate due to an architectural or performance upgrade or a refactoring change, you **MUST** update it to reflect the new implementation rather than deleting it, and still be relevant to code below it.
+  3. Inline commentary explaining *why* a specific performance pathway or layout was chosen must be aggressively guarded and kept in place.
+
 
 ## 3. Data Integrity & Concurrency
 - **Immutable Operations**: Never mutate the game's core data tables, specs, or engine lists directly. Always copy the data structure first.
