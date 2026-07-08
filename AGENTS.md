@@ -24,13 +24,13 @@ Because this code lives in a shared submodule across Java, Kotlin, and mixed env
 ## Starsector Architecture & Type Inference Rules
 Instead of relying on a tiny list of hardcoded classes, you must infer game types dynamically based on Starsector's strict structural naming parameters:
 
-* **The API Ecosystem (`*API`)**: Assume that almost every engine object, entity, or state manager ends with the `API` suffix (e.g., `ShipAPI`, `CombatEngineAPI`, `SectorEntityToken`, `MarketAPI`, `FactionAPI`, `WeaponAPI`, `FleetMemberAPI`, `LocationAPI`, etc.).
+- **The API Ecosystem (`*API`)**: Assume that almost every engine object, entity, or state manager ends with the `API` suffix (e.g., `ShipAPI`, `CombatEngineAPI`, `SectorEntityToken`, `MarketAPI`, `FactionAPI`, `WeaponAPI`, `FleetMemberAPI`, `LocationAPI`, etc.).
   - **Campaign vs Combat Separation**: Automatically deduce whether an object belongs to the Campaign layer or Combat layer by scanning its native methods or contextual package layout.
-* **The Plugin Lifecycle (`*Plugin` / `EveryFrame*`)**: Codebases will utilize specific entry points like `BaseModPlugin`, implementations of `EveryFrameScript`, `EveryFrameCombatPlugin`, `WeaponEffectPlugin`, or `ShipAIPlugin`. You must optimize these loops without mutating their basic execution definitions.
-* **Garbage Collection (GC) Pressure**: Starsector runs on a legacy JVM. Frame-rate stutters are driven by GC sweeps. You must actively minimize object churn inside rendering loops, `advance(float amount)`, and `applyEffect` methods.
-* **Data Structure Auditing**: Heavily scrutinize collection choices. Suggest specialized collections or primitives where applicable. Reject heavy `Map` and `List` allocations inside high-frequency loops. Recommend caching or array-backed alternatives.
-* **Engine-Safe Memory Management**: Watch for memory leaks across combat/campaign transitions. Ensure references to core loops, visual plugins, and transient listeners are properly cleaned up, checking `isEntityAlive()` or using weak references where required to prevent save-bloat and crashes.
-* **Multi-threading Limits**: Starsector's core loops are mostly single-threaded. CPU cycles are precious. Optimize algorithms (`O(N^2)` to `O(N log N)` or `O(1)`) to avoid dropping frames.
+- **The Plugin Lifecycle (`*Plugin` / `EveryFrame*`)**: Codebases will utilize specific entry points like `BaseModPlugin`, implementations of `EveryFrameScript`, `EveryFrameCombatPlugin`, `WeaponEffectPlugin`, or `ShipAIPlugin`. You must optimize these loops without mutating their basic execution definitions.
+- **Garbage Collection (GC) Pressure**: Starsector runs on a legacy JVM. Frame-rate stutters are driven by GC sweeps. You must actively minimize object churn inside rendering loops, `advance(float amount)`, and `applyEffect` methods.
+- **Data Structure Auditing**: Heavily scrutinize collection choices. Suggest specialized collections or primitives where applicable. Reject heavy `Map` and `List` allocations inside high-frequency loops. Recommend caching or array-backed alternatives.
+- **Engine-Safe Memory Management**: Watch for memory leaks across combat/campaign transitions. Ensure references to core loops, visual plugins, and transient listeners are properly cleaned up, checking `isEntityAlive()` or using weak references where required to prevent save-bloat and crashes.
+- **Multi-threading Limits**: Starsector's core loops are mostly single-threaded. CPU cycles are precious. Optimize algorithms (`O(N^2)` to `O(N log N)` or `O(1)`) to avoid dropping frames.
 
 ## Analytical Directive
 Every time you inspect code, you must execute a "CTO Review" containing:
