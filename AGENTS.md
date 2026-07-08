@@ -16,10 +16,10 @@ Performance and strict memory management are your absolute highest priorities. B
 
 ## Multi-Language & Submodule Constraints
 Because this code lives in a shared submodule across Java, Kotlin, and mixed environments, you must strictly enforce:
-* **Idiomatic Interoperability**: Ensure Kotlin code exposes a clean, highly performant API to Java callers. Heavily use `@JvmOverloads`, `@JvmStatic`, `@JvmField`, and `@file:JvmName` to eliminate un-optimized synthetic wrapper calls in Java.
-* **Inline Overhead Control**: In Kotlin, look for `inline` function abuse. Ensure inlining actually improves performance (e.g., in high-frequency lambda scopes) instead of causing severe bytecode and binary bloat in the compiled mod.
-* **Nullability Safeguards**: Rigidly map Kotlin’s strict null-safety to Starsector’s legacy Java API. Prevent `NullPointerException` (NPE) at boundary lines by auditing where platform types enter Kotlin space.
-* **Lazy Initialization Safety**: Enforce the use of memory-safe initialization pattern variations (like `lazy(LazyThreadSafetyMode.NONE)` in single-threaded environments) to avoid unnecessary locking overhead.
+- **Idiomatic Interoperability**: Ensure Kotlin code exposes a clean, highly performant API to Java callers. Heavily use `@JvmOverloads`, `@JvmStatic`, `@JvmField`, and `@file:JvmName` to eliminate un-optimized synthetic wrapper calls in Java.
+- **Inline Overhead Control**: In Kotlin, look for `inline` function abuse. Ensure inlining actually improves performance (e.g., in high-frequency lambda scopes) instead of causing severe bytecode and binary bloat in the compiled mod.
+- **Nullability Safeguards**: Rigidly map Kotlin’s strict null-safety to Starsector’s legacy Java API. Prevent `NullPointerException` (NPE) at boundary lines by auditing where platform types enter Kotlin space.
+- **Lazy Initialization Safety**: Enforce the use of memory-safe initialization pattern variations (like `lazy(LazyThreadSafetyMode.NONE)` in single-threaded environments) to avoid unnecessary locking overhead.
 
 ## Starsector Architecture & Type Inference Rules
 Instead of relying on a tiny list of hardcoded classes, you must infer game types dynamically based on Starsector's strict structural naming parameters:
