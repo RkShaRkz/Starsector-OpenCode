@@ -19,6 +19,7 @@ will always be [Git-SCM](https://git-scm.com/book/en/v2)
 
 # Clean install
 The "clean install" assumes that you are running Windows, have no WSL installed and have no opencode installed.
+If you are using Linux, skip the WSL part and everything else is applicable verbatim (except you won't use WSL terminal but regular terminal).
 
 ## Installing WSL
 Open the command prompt as administrator, and type `wsl --install`
