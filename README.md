@@ -19,7 +19,6 @@ will always be [Git-SCM](https://git-scm.com/book/en/v2)
 
 # Clean install
 The "clean install" assumes that you are running Windows, have no WSL installed and have no opencode installed.
-If you are using Linux, skip the WSL part and everything else is applicable verbatim (except you won't use WSL terminal but regular terminal).
 
 ## Installing WSL
 Open the command prompt as administrator, and type `wsl --install`
@@ -90,6 +89,17 @@ You are also free to just directly modify your local copy of the submodule and k
 ```
 git submodule add https://github.com/RkShaRkz/Starsector-OpenCode .opencode-brain
 ```
+This repository also has a few git submodules of it's own, just for the skills. They are flattened into `skills/` folder,
+but just to follow git pedantics, you might also want to initialize them too.
+```
+git submodule update --init --recursive
+```
+Afterwards, running `deploy.sh` from the git submodule's (`.opencode-brain/skill-submodules`) folder will update this repo's submodules, flatten their content
+and deploy them to the `skills` folder.
+
+These git submodules' individual skills are already contained in the `skills` folder, but you can always add more skill sources (and update the deploy.sh script)
+in which case doing this will become mandatory. In fact, consider it mandatory even if you never look at these submodules and skip only if you know what you're doing.
+
 2) Create symbolic links (since these files need to be in project root for opencode to see them)
 Linux:
 ```
@@ -112,14 +122,16 @@ git add .gitmodules .opencode-brain opencode.json RULES.md AGENTS.md
 git commit -m "chore: integrate universal Starsector OpenCode framework submodule"
 git push
 ```
-4) OPTIONAL: update the submodule and push changes (to your repo) if any
+4) OPTIONAL: update the submodule and push changes (to your repo) if any. The `--recursive` is necessary for the nested submodules (this repo's submodules)
 ```
-git submodule update --remote --merge
+git submodule update --remote --merge --recursive
 
 git add .opencode-brain
 git commit -m "chore: update Starsector-OpenCode submodule to latest version"
 git push
 ```
+
+## Do not forget to run `.opencode-brain/skill-submodules/deploy.sh` to refresh the skills folder!
 
 5) Remember to clone your mod recursively from now on.
 
