@@ -1,3 +1,6 @@
 [submodule "skill-submodules/superpowers"]
 	path = skill-submodules/superpowers
 	url = https://github.com/obra/superpowers
+[submodule "skill-submodules/andrej-karpathy-skills"]
+	path = skill-submodules/andrej-karpathy-skills
+	url = https://github.com/multica-ai/andrej-karpathy-skills
