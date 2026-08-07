@@ -26,7 +26,7 @@ This will install the **W**indows **S**ubsystem for **L**inux as well as Ubuntu 
 After doing this - but **before** proceeding further - restart the computer as the terminal says.
 After restarting, WSL ubuntu will proceed with downloading/installation.
 
-Installing XServer so you can view the Ubuntu monitor(s) is left as an excercise to the reader.
+Installing XServer so you can view the Ubuntu monitor(s) is left as an exercise to the reader.
 
 
 ### Updating WSL's Ubuntu
@@ -69,6 +69,22 @@ source ~/.bashrc
 
 Now you're ready to run opencode.
 
+## Where OpenCode actually _expects_ its skills.
+
+Unfortunately, this isn't quite as easy and straight-forward as I'd hoped it'd be.
+OpenCode looks for skills in these non-negotiable locations only:
+```
+Project config: .opencode/skills/<name>/SKILL.md
+Global config: ~/.config/opencode/skills/<name>/SKILL.md
+Project Claude-compatible: .claude/skills/<name>/SKILL.md
+Global Claude-compatible: ~/.claude/skills/<name>/SKILL.md
+Project agent-compatible: .agents/skills/<name>/SKILL.md
+Global agent-compatible: ~/.agents/skills/<name>/SKILL.md
+```
+Information has been picked up from https://opencode.ai/docs/skills/ - If something changes, do feel free to apply.
+At the time of writing, this has been confirmed as true, and was the only place I could put the skills in and have
+them get picked up and be usable.
+
 ## Modifying the OpenCode setup (AGENTS.md, RULES.md, opencode.json)
 This repository only contains these "rules" (aka "brain") files; so if/when modifying these files,
 you should *instead* update the submodule (this repository) and then pull the submodule updates in your
@@ -76,7 +92,7 @@ main project.
 
 If you forked your own copy of this repository, just update your repository, then do
 ```
-git submodule update --remote --merge
+git submodule update --remote --merge --recursive
 ```
 
 Otherwise, as updates are pushed here, you can check periodically if anything new happened and pull these updates.
@@ -101,17 +117,22 @@ These git submodules' individual skills are already contained in the `skills` fo
 in which case doing this will become mandatory. In fact, consider it mandatory even if you never look at these submodules and skip only if you know what you're doing.
 
 2) Create symbolic links (since these files need to be in project root for opencode to see them)
+Since 'skills' need to be in the aforementioned non-negotiable locations, we'll have to create that folder as well and symlink the skills into there.
 Linux:
 ```
 ln -s .opencode-brain/opencode.json opencode.json
 ln -s .opencode-brain/RULES.md RULES.md
 ln -s .opencode-brain/AGENTS.md AGENTS.md
+mkdir -p .opencode
+ln -s .opencode-brain/skills .opencode/skills
 ```
 Windows:
 ```
 mklink opencode.json .opencode-brain\opencode.json
 mklink RULES.md .opencode-brain\RULES.md
 mklink AGENTS.md .opencode-brain\AGENTS.md
+mkdir .opencode
+mklink /D .opencode\skills .opencode-brain\skills
 ```
 _WARNING:_ I've noticed that when symlinks are created in this way, when the root files are updated the symlinks do not update their content.
 Unless you figure out how to address this issue, the easiest course of action is to simply regenerate the symlinks after updating the submodule.
